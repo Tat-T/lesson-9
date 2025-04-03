@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
         Main main = new Main();
-//        main.task1();
-//        main.task2();
-        main.task3();
+       main.task1();
+       main.task2();
+       main.task3();
     }
 
     private void task1() {
@@ -102,100 +102,83 @@ public class Main {
     }
 
     private void task3() {
-        // Создайте класс "Автомобиля". Он должен хранить информацию о названии автомобиля, год выпуска, ценаб цвет,
+        // Создайте класс "Автомобиля". Он должен хранить информацию о названии автомобиля, год выпуска, цена, цвет,
         // объём двигателя. Нужно создать набор автомобилей и выполнить следующие задачи:
         // * Показать все автомобили;
         // * Показать все автомобили заданного цвета;
-        // * Показать все автомобили заданного объёмаж
+        // * Показать все автомобили заданного объёма;
         // * Показать все автомобили дороже заданной цены;
-        // * Показать все автомобили чей год выпуска находится в указанном диапозонеж
-        List<Car> cars = new ArrayList<>();
-        cars.add(new Car("Toyota Camry", 2020, 25000, "Черный", 2.5));
-        cars.add(new Car("Honda Accord", 2019, 23000, "Синий", 2.0));
-        cars.add(new Car("BMW X5", 2022, 60000, "Белый", 3.0));
-        cars.add(new Car("Audi A6", 2021, 55000, "Черный", 2.8));
+        // * Показать все автомобили чей год выпуска находится в указанном диапазоне;
+        List<Car> cars = Arrays.asList(
+                new Car("Toyota Camry", 2020, 25000, "Черный", 2.5),
+                new Car("Honda Accord", 2019, 23000, "Синий", 2.0),
+                new Car("BMW X5", 2022, 60000, "Белый", 3.0),
+                new Car("Audi A6", 2021, 55000, "Черный", 2.8)
+        );
 
         System.out.println("Все автомобили:");
-        printCars(cars);
+        cars.forEach(System.out::println);
 
         System.out.println("\nАвтомобили черного цвета:");
-        printCars(filterByColor(cars, "Черный"));
+        filterByColor(cars, "Черный").forEach(System.out::println);
 
         System.out.println("\nАвтомобили с объемом двигателя 2.5:");
-        printCars(filterByEngineVolume(cars, 2.5));
+        filterByEngineVolume(cars, 2.5).forEach(System.out::println);
 
         System.out.println("\nАвтомобили дороже 25000:");
-        printCars(filterByPrice(cars, 25000));
+        filterByPrice(cars, 25000).forEach(System.out::println);
 
         System.out.println("\nАвтомобили 2020-2022 годов:");
-        printCars(filterByYearRange(cars, 2020, 2022));
+        filterByYearRange(cars, 2020, 2022).forEach(System.out::println);
     }
 
-    private static void printCars(List<Car> cars) {
-        for (Car car : cars) {
-            System.out.println(car);
-        }
-    }
-
+    // Фильтр по цвету
     private static List<Car> filterByColor(List<Car> cars, String color) {
-        List<Car> result = new ArrayList<>();
-        for (Car car : cars) {
-            if (car.color.equalsIgnoreCase(color)) {
-                result.add(car);
-            }
-        }
-        return result;
+        return cars.stream()
+                .filter(car -> car.color.equalsIgnoreCase(color))
+                .collect(Collectors.toList());
     }
 
+    // Фильтр по объему двигателя
     private static List<Car> filterByEngineVolume(List<Car> cars, double volume) {
-        List<Car> result = new ArrayList<>();
-        for (Car car : cars) {
-            if (car.engineVolume == volume) {
-                result.add(car);
-            }
-        }
-        return result;
+        return cars.stream()
+                .filter(car -> car.engineVolume == volume)
+                .collect(Collectors.toList());
     }
 
+    // Фильтр по цене (дороже указанной)
     private static List<Car> filterByPrice(List<Car> cars, double minPrice) {
-        List<Car> result = new ArrayList<>();
-        for (Car car : cars) {
-            if (car.price > minPrice) {
-                result.add(car);
-            }
-        }
-        return result;
+        return cars.stream()
+                .filter(car -> car.price > minPrice)
+                .collect(Collectors.toList());
     }
 
+    // Фильтр по диапазону годов
     private static List<Car> filterByYearRange(List<Car> cars, int minYear, int maxYear) {
-        List<Car> result = new ArrayList<>();
-        for (Car car : cars) {
-            if (car.year >= minYear && car.year <= maxYear) {
-                result.add(car);
-            }
-        }
-        return result;
+        return cars.stream()
+                .filter(car -> car.year >= minYear && car.year <= maxYear)
+                .collect(Collectors.toList());
+    }
+}
+
+class Car {
+    String name;
+    int year;
+    double price;
+    String color;
+    double engineVolume;
+
+    public Car(String name, int year, double price, String color, double engineVolume) {
+        this.name = name;
+        this.year = year;
+        this.price = price;
+        this.color = color;
+        this.engineVolume = engineVolume;
     }
 
-    private static class Car {
-        String name;
-        int year;
-        double price;
-        String color;
-        double engineVolume;
-
-        public Car(String name, int year, double price, String color, double engineVolume) {
-            this.name = name;
-            this.year = year;
-            this.price = price;
-            this.color = color;
-            this.engineVolume = engineVolume;
-        }
-
-        @Override
-        public String toString() {
-            return name + " (" + year + ", " + color + ", " + engineVolume + "L, $" + price + ")";
-        }
+    @Override
+    public String toString() {
+        return name + " (" + year + ", " + color + ", " + engineVolume + "L, $" + price + ")";
     }
 
 }
